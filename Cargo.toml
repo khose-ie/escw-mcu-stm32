@@ -1,0 +1,7 @@
+[package]
+name = "escw-mcu-stm32"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "escw_mcu_stm32"
