@@ -5,3 +5,9 @@ edition = "2021"
 
 [lib]
 name = "escw_mcu_stm32"
+
+[dependencies]
+escw-mcu = "0.1.0"
+
+[features]
+stm32f4 = []
