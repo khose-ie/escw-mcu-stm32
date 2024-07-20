@@ -11,3 +11,4 @@ escw-mcu = "0.1.0"
 
 [features]
 stm32f4 = []
+io = ["escw-mcu/io"]
