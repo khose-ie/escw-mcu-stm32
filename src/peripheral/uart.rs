@@ -107,8 +107,9 @@ impl Uart for Stm32Usart {
     }
 
     fn receive(&self, data: &mut [u8], timeout: u32) -> Result<u32> {
+        let mut size: u16 = 0;
+
         unsafe {
-            let mut size: u16 = 0;
             let state = HAL_UARTEx_ReceiveToIdle(
                 self.uart.into(),
                 data.as_ptr(),
@@ -125,32 +126,28 @@ impl Uart for Stm32Usart {
     }
 
     fn async_send(&mut self, kind: AsyncKind, data: &[u8]) -> Result<()> {
-        unsafe {
-            match kind {
-                AsyncKind::Interrupt => {
-                    HAL_UART_Transmit_IT(self.uart.into(), data.as_ptr(), data.len() as u16).into()
-                }
-                AsyncKind::Dma => {
-                    HAL_UART_Transmit_DMA(self.uart.into(), data.as_ptr(), data.len() as u16).into()
-                }
-            }
+        match kind {
+            AsyncKind::Interrupt => unsafe {
+                HAL_UART_Transmit_IT(self.uart.into(), data.as_ptr(), data.len() as u16).into()
+            },
+            AsyncKind::Dma => unsafe {
+                HAL_UART_Transmit_DMA(self.uart.into(), data.as_ptr(), data.len() as u16).into()
+            },
         }
     }
 
     fn async_receive(&mut self, kind: AsyncKind, data: &mut [u8]) -> Result<()> {
-        unsafe {
-            match kind {
-                AsyncKind::Interrupt => {
-                    event::EventCenter::set_size(self.uart, data.len() as u16);
-                    HAL_UARTEx_ReceiveToIdle_IT(self.uart.into(), data.as_ptr(), data.len() as u16)
-                        .into()
-                }
-                AsyncKind::Dma => {
-                    event::EventCenter::set_size(self.uart, data.len() as u16);
-                    HAL_UARTEx_ReceiveToIdle_DMA(self.uart.into(), data.as_ptr(), data.len() as u16)
-                        .into()
-                }
-            }
+        match kind {
+            AsyncKind::Interrupt => unsafe {
+                event::EventCenter::set_size(self.uart, data.len() as u16);
+                HAL_UARTEx_ReceiveToIdle_IT(self.uart.into(), data.as_ptr(), data.len() as u16)
+                    .into()
+            },
+            AsyncKind::Dma => unsafe {
+                event::EventCenter::set_size(self.uart, data.len() as u16);
+                HAL_UARTEx_ReceiveToIdle_DMA(self.uart.into(), data.as_ptr(), data.len() as u16)
+                    .into()
+            },
         }
     }
 
@@ -234,8 +231,7 @@ mod event {
 
     #[no_mangle]
     pub extern "C" fn HAL_UART_TxHalfCpltCallback(huart: &Huart) {
-        let a: Option<UartNum> = huart.try_into().ok();
-        if let Some(uart) = a {
+        if let Some(uart) = huart.try_into().ok() {
             EventCenter::invoke(uart, TransmitDirection::Send, TransmitState::Half, 0);
         }
     }

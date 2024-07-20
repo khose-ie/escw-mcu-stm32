@@ -105,12 +105,7 @@ impl escw_mcu::peripheral::io::Io for Io {
     }
 
     fn state(&self) -> IoState {
-        unsafe {
-            IoState::from(HAL_GPIO_ReadPin(
-                self.port as *const c_void,
-                self.pin.into(),
-            ))
-        }
+        IoState::from(unsafe { HAL_GPIO_ReadPin(self.port as *const c_void, self.pin.into()) })
     }
 
     fn write(&self, state: IoState) {
