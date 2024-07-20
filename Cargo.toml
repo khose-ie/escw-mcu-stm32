@@ -8,7 +8,16 @@ name = "escw_mcu_stm32"
 
 [dependencies]
 escw-mcu = "0.1.0"
+# spin = "0.9.8"
 
 [features]
 stm32f4 = []
 io = ["escw-mcu/io"]
+uart1 = ["escw-mcu/uart"]
+uart2 = ["escw-mcu/uart"]
+uart3 = ["escw-mcu/uart"]
+uart4 = ["escw-mcu/uart"]
+uart5 = ["escw-mcu/uart"]
+uart6 = ["escw-mcu/uart"]
+uart7 = ["escw-mcu/uart"]
+uart8 = ["escw-mcu/uart"]

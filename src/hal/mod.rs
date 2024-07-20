@@ -1,4 +1,5 @@
 pub mod io;
+pub mod uart;
 
 use escw_mcu::common::{Error, Result};
 
