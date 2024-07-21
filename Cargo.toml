@@ -13,7 +13,8 @@ homepage = "https://github.com/khose-ie/escw-mcu-stm32"
 name = "escw_mcu_stm32"
 
 [dependencies]
-escw-mcu = "0.1.0"
+# escw-mcu = "0.1.0"
+escw-mcu = { path = "../escw-mcu" }
 # spin = "0.9.8"
 
 [features]
