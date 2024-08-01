@@ -1,8 +1,10 @@
 pub mod i2c;
 pub mod io;
+pub mod spi;
 pub mod uart;
 
-use escw_mcu::common::{Error, Result};
+use escw_mcu::common::Error;
+use escw_mcu::common::Result;
 
 #[repr(C)]
 #[derive(Debug)]
