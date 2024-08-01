@@ -1,20 +1,20 @@
 use core::ffi::c_void;
-use escw_mcu::peripheral::io::IoState;
+use escw_mcu::peripheral::io::{IoDevice, IoState};
 
 use crate::hal::io::*;
 
 pub enum IoPort {
-    IOA = crate::memory::GPIOA_BASE as isize,
-    IOB = crate::memory::GPIOB_BASE as isize,
-    IOC = crate::memory::GPIOC_BASE as isize,
-    IOD = crate::memory::GPIOD_BASE as isize,
-    IOE = crate::memory::GPIOE_BASE as isize,
-    IOF = crate::memory::GPIOF_BASE as isize,
-    IOG = crate::memory::GPIOG_BASE as isize,
-    IOH = crate::memory::GPIOH_BASE as isize,
-    IOI = crate::memory::GPIOI_BASE as isize,
-    IOJ = crate::memory::GPIOJ_BASE as isize,
-    IOK = crate::memory::GPIOK_BASE as isize,
+    A = crate::memory::GPIOA_BASE as isize,
+    B = crate::memory::GPIOB_BASE as isize,
+    C = crate::memory::GPIOC_BASE as isize,
+    D = crate::memory::GPIOD_BASE as isize,
+    E = crate::memory::GPIOE_BASE as isize,
+    F = crate::memory::GPIOF_BASE as isize,
+    G = crate::memory::GPIOG_BASE as isize,
+    H = crate::memory::GPIOH_BASE as isize,
+    I = crate::memory::GPIOI_BASE as isize,
+    J = crate::memory::GPIOJ_BASE as isize,
+    K = crate::memory::GPIOK_BASE as isize,
 }
 
 impl Into<u32> for IoPort {
@@ -74,8 +74,8 @@ impl From<u16> for IoPin {
 }
 
 const U16_TO_PIN: [u16; IoPin::size()] = [
-    0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080, 0x0100, 0x0200, 0x0400, 0x0800,
-    0x1000, 0x2000, 0x4000, 0x8000,
+    0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080, 0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000,
+    0x4000, 0x8000,
 ];
 
 impl Into<u16> for IoPin {
@@ -89,15 +89,12 @@ pub struct Io {
     pin: IoPin,
 }
 
-impl escw_mcu::peripheral::io::Io for Io {
+impl IoDevice for Io {
     type Port = IoPort;
     type Pin = IoPin;
 
     fn new(port: IoPort, pin: IoPin) -> Self {
-        Io {
-            port: port.into(),
-            pin,
-        }
+        Io { port: port.into(), pin }
     }
 
     fn with_event(&self, handle: fn()) {
