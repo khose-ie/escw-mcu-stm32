@@ -1,3 +1,4 @@
+pub mod i2c;
 pub mod io;
 pub mod uart;
 

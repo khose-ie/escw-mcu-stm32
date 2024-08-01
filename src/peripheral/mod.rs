@@ -12,3 +12,6 @@ pub mod io;
     feature = "uart8",
 ))]
 pub mod uart;
+
+#[cfg(any(feature = "i2c1", feature = "i2c2", feature = "i2c3"))]
+pub mod i2c;

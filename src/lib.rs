@@ -24,4 +24,10 @@ impl Mcu for Stm32 {
         feature = "uart8",
     ))]
     type Uart = peripheral::uart::Uart;
+
+    #[cfg(any(feature = "i2c1", feature = "i2c2", feature = "i2c3"))]
+    type I2cMaster = peripheral::i2c::I2cMaster;
+
+    #[cfg(any(feature = "i2c1", feature = "i2c2", feature = "i2c3"))]
+    type I2cSlave = peripheral::i2c::I2cSlave;
 }
