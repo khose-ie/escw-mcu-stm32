@@ -94,13 +94,13 @@ pub struct Uart {
     uart: UartIdentifies,
 }
 
-impl UartDevice for Uart {
-    type Identifies = UartIdentifies;
-
-    fn new(uart: Self::Identifies) -> Self {
+impl Uart {
+    pub fn new(uart: UartIdentifies) -> Self {
         Uart { uart }
     }
+}
 
+impl UartDevice for Uart {
     /// THe TransmitState::Half state will be sent as event only on DMA kind.
     fn with_event(&mut self, handle: UartEventHandle) {
         event::EventCenter::set(self.uart, handle);

@@ -57,13 +57,13 @@ pub struct I2cMaster {
     i2c: I2cIdentifies,
 }
 
-impl I2cMasterDevice for I2cMaster {
-    type Identifies = I2cIdentifies;
-
-    fn new(i2c: Self::Identifies) -> Self {
+impl I2cMaster {
+    pub fn new(i2c: I2cIdentifies) -> Self {
         I2cMaster { i2c }
     }
+}
 
+impl I2cMasterDevice for I2cMaster {
     fn with_event(&mut self, handle: I2cEventHandle) {
         event::EventCenter::set(self.i2c, handle)
     }
@@ -233,13 +233,13 @@ pub struct I2cSlave {
     i2c: I2cIdentifies,
 }
 
-impl I2cSlaveDevice for I2cSlave {
-    type Identifies = I2cIdentifies;
-
-    fn new(i2c: Self::Identifies) -> Self {
+impl I2cSlave {
+    pub fn new(i2c: I2cIdentifies) -> Self {
         I2cSlave { i2c }
     }
+}
 
+impl I2cSlaveDevice for I2cSlave {
     fn with_event(&mut self, handle: I2cEventHandle) {
         event::EventCenter::set(self.i2c, handle)
     }

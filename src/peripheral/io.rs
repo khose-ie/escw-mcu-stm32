@@ -74,8 +74,8 @@ impl From<u16> for IoPin {
 }
 
 const U16_TO_PIN: [u16; IoPin::size()] = [
-    0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080, 0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000,
-    0x4000, 0x8000,
+    0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080, 0x0100, 0x0200, 0x0400, 0x0800,
+    0x1000, 0x2000, 0x4000, 0x8000,
 ];
 
 impl Into<u16> for IoPin {
@@ -89,14 +89,16 @@ pub struct Io {
     pin: IoPin,
 }
 
-impl IoDevice for Io {
-    type Port = IoPort;
-    type Pin = IoPin;
-
-    fn new(port: IoPort, pin: IoPin) -> Self {
-        Io { port: port.into(), pin }
+impl Io {
+    pub fn new(port: IoPort, pin: IoPin) -> Self {
+        Io {
+            port: port.into(),
+            pin,
+        }
     }
+}
 
+impl IoDevice for Io {
     fn with_event(&self, handle: fn()) {
         event::EventHandles::set(self.pin.into(), handle);
     }
