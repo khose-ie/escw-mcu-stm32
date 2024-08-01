@@ -25,3 +25,6 @@ pub mod i2c;
     feature = "spi6",
 ))]
 pub mod spi;
+
+#[cfg(feature = "iwdg")]
+pub mod iwdg;

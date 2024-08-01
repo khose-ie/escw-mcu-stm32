@@ -1,5 +1,6 @@
 pub mod i2c;
 pub mod io;
+pub mod iwdg;
 pub mod spi;
 pub mod uart;
 
