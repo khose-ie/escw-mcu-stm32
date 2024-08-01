@@ -23,5 +23,5 @@ impl Mcu for Stm32 {
         feature = "uart7",
         feature = "uart8",
     ))]
-    type Uart = peripheral::uart::Stm32Usart;
+    type Uart = peripheral::uart::Uart;
 }
