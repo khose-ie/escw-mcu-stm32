@@ -28,3 +28,6 @@ pub mod spi;
 
 #[cfg(feature = "iwdg")]
 pub mod iwdg;
+
+#[cfg(feature = "wwdg")]
+pub mod wwdg;

@@ -3,6 +3,7 @@ pub mod io;
 pub mod iwdg;
 pub mod spi;
 pub mod uart;
+pub mod wwdg;
 
 use escw_mcu::common::Error;
 use escw_mcu::common::Result;
