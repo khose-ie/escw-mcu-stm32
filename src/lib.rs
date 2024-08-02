@@ -40,4 +40,7 @@ impl Mcu for Stm32 {
         feature = "spi6",
     ))]
     type Spi = peripheral::spi::Spi;
+
+    #[cfg(feature = "flash")]
+    type Flash = peripheral::flash::Flash;
 }

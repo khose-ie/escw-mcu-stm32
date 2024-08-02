@@ -31,3 +31,6 @@ pub mod iwdg;
 
 #[cfg(feature = "wwdg")]
 pub mod wwdg;
+
+#[cfg(feature = "flash")]
+pub mod flash;

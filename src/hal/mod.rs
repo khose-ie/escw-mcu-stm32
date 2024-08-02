@@ -1,3 +1,4 @@
+pub mod flash;
 pub mod i2c;
 pub mod io;
 pub mod iwdg;
@@ -16,6 +17,18 @@ pub enum HalStatus {
     Busy = 2,
     Timeout = 3,
     Unknown = 4,
+}
+
+impl HalStatus {
+    pub fn ok(&self) -> Result<()> {
+        match self {
+            HalStatus::Ok => Ok(()),
+            HalStatus::Error => Err(Error::Param),
+            HalStatus::Busy => Err(Error::PeripheralBusy),
+            HalStatus::Timeout => Err(Error::WaitTimeout),
+            HalStatus::Unknown => Err(Error::Unknown),
+        }
+    }
 }
 
 impl From<u32> for HalStatus {
