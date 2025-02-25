@@ -3,7 +3,8 @@ use escw_mcu::peripheral::io::{IoDevice, IoState};
 
 use crate::hal::io::*;
 
-pub enum IoPort {
+pub enum IoPort
+{
     A = crate::memory::GPIOA_BASE as isize,
     B = crate::memory::GPIOB_BASE as isize,
     C = crate::memory::GPIOC_BASE as isize,
@@ -17,14 +18,17 @@ pub enum IoPort {
     K = crate::memory::GPIOK_BASE as isize,
 }
 
-impl Into<u32> for IoPort {
-    fn into(self) -> u32 {
+impl Into<u32> for IoPort
+{
+    fn into(self) -> u32
+    {
         self as u32
     }
 }
 
 #[derive(Clone, Copy)]
-pub enum IoPin {
+pub enum IoPin
+{
     P00,
     P01,
     P02,
@@ -43,14 +47,18 @@ pub enum IoPin {
     P15,
 }
 
-impl IoPin {
-    pub const fn size() -> usize {
+impl IoPin
+{
+    pub const fn size() -> usize
+    {
         16
     }
 }
 
-impl From<u16> for IoPin {
-    fn from(value: u16) -> Self {
+impl From<u16> for IoPin
+{
+    fn from(value: u16) -> Self
+    {
         match value {
             0x0001 => Self::P00,
             0x0002 => Self::P01,
@@ -74,76 +82,88 @@ impl From<u16> for IoPin {
 }
 
 const U16_TO_PIN: [u16; IoPin::size()] = [
-    0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080, 0x0100, 0x0200, 0x0400, 0x0800,
-    0x1000, 0x2000, 0x4000, 0x8000,
+    0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080, 0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000, 0x8000,
 ];
 
-impl Into<u16> for IoPin {
-    fn into(self) -> u16 {
+impl Into<u16> for IoPin
+{
+    fn into(self) -> u16
+    {
         U16_TO_PIN[self as usize]
     }
 }
 
-pub struct Io {
+pub struct Io
+{
     port: u32,
     pin: IoPin,
 }
 
-impl Io {
-    pub fn new(port: IoPort, pin: IoPin) -> Self {
-        Io {
-            port: port.into(),
-            pin,
-        }
+impl Io
+{
+    pub fn new(port: IoPort, pin: IoPin) -> Self
+    {
+        Io { port: port.into(), pin }
     }
 }
 
-impl IoDevice for Io {
-    fn with_event(&self, handle: fn()) {
+impl IoDevice for Io
+{
+    fn with_event(&self, handle: fn())
+    {
         event::EventHandles::set(self.pin.into(), handle);
     }
 
-    fn state(&self) -> IoState {
+    fn state(&self) -> IoState
+    {
         IoState::from(unsafe { HAL_GPIO_ReadPin(self.port as *const c_void, self.pin.into()) })
     }
 
-    fn write(&self, state: IoState) {
+    fn write(&self, state: IoState)
+    {
         unsafe {
             HAL_GPIO_WritePin(self.port as *const c_void, self.pin.into(), state.into());
         }
     }
 
-    fn toggle(&self) {
+    fn toggle(&self)
+    {
         unsafe {
             HAL_GPIO_TogglePin(self.port as *const c_void, self.pin.into());
         }
     }
 }
 
-mod event {
+mod event
+{
     use super::IoPin;
 
     static mut EVENT_HANDLES: EventHandles = EventHandles::new();
 
     #[derive(Clone, Copy)]
-    pub struct EventHandles {
+    pub struct EventHandles
+    {
         invokes: [Option<fn()>; IoPin::size()],
     }
 
-    impl EventHandles {
-        const fn new() -> Self {
+    impl EventHandles
+    {
+        const fn new() -> Self
+        {
             EventHandles {
                 invokes: [None; IoPin::size()],
             }
         }
 
-        pub fn set(pin: IoPin, func: fn()) {
+        pub fn set(pin: IoPin, func: fn())
+        {
             unsafe {
                 EVENT_HANDLES.invokes[pin as usize] = Some(func);
             }
         }
 
-        pub fn invoke(&self, pin: IoPin) {
+        pub fn invoke(&self, pin: IoPin)
+        {
             if let Some(invoke) = self.invokes[pin as usize].as_ref() {
                 invoke();
             }
@@ -151,7 +171,8 @@ mod event {
     }
 
     #[no_mangle]
-    pub extern "C" fn HAL_GPIO_EXTI_Callback(pin: u16) {
+    pub extern "C" fn HAL_GPIO_EXTI_Callback(pin: u16)
+    {
         unsafe {
             EVENT_HANDLES.invoke(IoPin::from(pin));
         }

@@ -11,7 +11,8 @@ use escw_mcu::common::Result;
 
 #[repr(C)]
 #[derive(Debug)]
-pub enum HalStatus {
+pub enum HalStatus
+{
     Ok = 0,
     Error = 1,
     Busy = 2,
@@ -19,8 +20,10 @@ pub enum HalStatus {
     Unknown = 4,
 }
 
-impl HalStatus {
-    pub fn ok(&self) -> Result<()> {
+impl HalStatus
+{
+    pub fn ok(&self) -> Result<()>
+    {
         match self {
             HalStatus::Ok => Ok(()),
             HalStatus::Error => Err(Error::Param),
@@ -31,8 +34,10 @@ impl HalStatus {
     }
 }
 
-impl From<u32> for HalStatus {
-    fn from(value: u32) -> HalStatus {
+impl From<u32> for HalStatus
+{
+    fn from(value: u32) -> HalStatus
+    {
         match value {
             0 => HalStatus::Ok,
             1 => HalStatus::Error,
@@ -43,8 +48,10 @@ impl From<u32> for HalStatus {
     }
 }
 
-impl Into<Result<()>> for HalStatus {
-    fn into(self) -> Result<()> {
+impl Into<Result<()>> for HalStatus
+{
+    fn into(self) -> Result<()>
+    {
         match self {
             Self::Ok => Ok(()),
             Self::Error => Err(Error::Param),
@@ -55,8 +62,10 @@ impl Into<Result<()>> for HalStatus {
     }
 }
 
-impl Into<Error> for HalStatus {
-    fn into(self) -> Error {
+impl Into<Error> for HalStatus
+{
+    fn into(self) -> Error
+    {
         match self {
             Self::Ok => Error::Param,
             Self::Error => Error::Param,

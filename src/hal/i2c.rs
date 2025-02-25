@@ -1,7 +1,8 @@
 use super::HalStatus;
 
 #[repr(C)]
-pub struct Hi2c {
+pub struct Hi2c
+{
     pub instance: u32,
 }
 
@@ -15,57 +16,34 @@ extern "C" {
 }
 
 extern "C" {
-    pub fn HAL_I2C_Master_Transmit(
-        hi2c: &Hi2c, DevAddress: u16, pData: *const u8, Size: u16, Timeout: u32,
-    ) -> HalStatus;
-    pub fn HAL_I2C_Master_Receive(hi2c: &Hi2c, DevAddress: u16, pData: *const u8, Size: u16, Timeout: u32)
-        -> HalStatus;
+    pub fn HAL_I2C_Master_Transmit(hi2c: &Hi2c, DevAddr: u16, pData: *const u8, Size: u16, Timeout: u32) -> HalStatus;
+    pub fn HAL_I2C_Master_Receive(hi2c: &Hi2c, DevAddr: u16, pData: *const u8, Size: u16, Timeout: u32) -> HalStatus;
     pub fn HAL_I2C_Slave_Transmit(hi2c: &Hi2c, pData: *const u8, Size: u16, Timeout: u32) -> HalStatus;
     pub fn HAL_I2C_Slave_Receive(hi2c: &Hi2c, pData: *const u8, Size: u16, Timeout: u32) -> HalStatus;
-    pub fn HAL_I2C_Mem_Write(
-        hi2c: &Hi2c, DevAddress: u16, MemAddress: u16, MemAddSize: u16, pData: *const u8, Size: u16, Timeout: u32,
-    ) -> HalStatus;
-    pub fn HAL_I2C_Mem_Read(
-        hi2c: &Hi2c, DevAddress: u16, MemAddress: u16, MemAddSize: u16, pData: *const u8, Size: u16, Timeout: u32,
-    ) -> HalStatus;
-    pub fn HAL_I2C_IsDeviceReady(hi2c: &Hi2c, DevAddress: u16, Trials: u32, Timeout: u32) -> HalStatus;
-    pub fn HAL_I2C_Master_Transmit_IT(hi2c: &Hi2c, DevAddress: u16, pData: *const u8, Size: u16) -> HalStatus;
-    pub fn HAL_I2C_Master_Receive_IT(hi2c: &Hi2c, DevAddress: u16, pData: *const u8, Size: u16) -> HalStatus;
+    pub fn HAL_I2C_Mem_Write(hi2c: &Hi2c, DevAddr: u16, MemAddr: u16, MemAddSize: u16, pData: *const u8, Size: u16, Timeout: u32) -> HalStatus;
+    pub fn HAL_I2C_Mem_Read(hi2c: &Hi2c, DevAddr: u16, MemAddr: u16, MemAddSize: u16, pData: *const u8, Size: u16, Timeout: u32) -> HalStatus;
+    pub fn HAL_I2C_IsDeviceReady(hi2c: &Hi2c, DevAddr: u16, Trials: u32, Timeout: u32) -> HalStatus;
+    pub fn HAL_I2C_Master_Transmit_IT(hi2c: &Hi2c, DevAddr: u16, pData: *const u8, Size: u16) -> HalStatus;
+    pub fn HAL_I2C_Master_Receive_IT(hi2c: &Hi2c, DevAddr: u16, pData: *const u8, Size: u16) -> HalStatus;
     pub fn HAL_I2C_Slave_Transmit_IT(hi2c: &Hi2c, pData: *const u8, Size: u16) -> HalStatus;
     pub fn HAL_I2C_Slave_Receive_IT(hi2c: &Hi2c, pData: *const u8, Size: u16) -> HalStatus;
-    pub fn HAL_I2C_Mem_Write_IT(
-        hi2c: &Hi2c, DevAddress: u16, MemAddress: u16, MemAddSize: u16, pData: *const u8, Size: u16,
-    ) -> HalStatus;
-    pub fn HAL_I2C_Mem_Read_IT(
-        hi2c: &Hi2c, DevAddress: u16, MemAddress: u16, MemAddSize: u16, pData: *const u8, Size: u16,
-    ) -> HalStatus;
-    pub fn HAL_I2C_Master_Seq_Transmit_IT(
-        hi2c: &Hi2c, DevAddress: u16, pData: *const u8, Size: u16, XferOptions: u32,
-    ) -> HalStatus;
-    pub fn HAL_I2C_Master_Seq_Receive_IT(
-        hi2c: &Hi2c, DevAddress: u16, pData: *const u8, Size: u16, XferOptions: u32,
-    ) -> HalStatus;
+    pub fn HAL_I2C_Mem_Write_IT(hi2c: &Hi2c, DevAddr: u16, MemAddr: u16, MemAddSize: u16, pData: *const u8, Size: u16) -> HalStatus;
+    pub fn HAL_I2C_Mem_Read_IT(hi2c: &Hi2c, DevAddr: u16, MemAddr: u16, MemAddSize: u16, pData: *const u8, Size: u16) -> HalStatus;
+    pub fn HAL_I2C_Master_Seq_Transmit_IT(hi2c: &Hi2c, DevAddr: u16, pData: *const u8, Size: u16, XferOptions: u32) -> HalStatus;
+    pub fn HAL_I2C_Master_Seq_Receive_IT(hi2c: &Hi2c, DevAddr: u16, pData: *const u8, Size: u16, XferOptions: u32) -> HalStatus;
     pub fn HAL_I2C_Slave_Seq_Transmit_IT(hi2c: &Hi2c, pData: *const u8, Size: u16, XferOptions: u32) -> HalStatus;
     pub fn HAL_I2C_Slave_Seq_Receive_IT(hi2c: &Hi2c, pData: *const u8, Size: u16, XferOptions: u32) -> HalStatus;
     pub fn HAL_I2C_EnableListen_IT(hi2c: &Hi2c) -> HalStatus;
     pub fn HAL_I2C_DisableListen_IT(hi2c: &Hi2c) -> HalStatus;
-    pub fn HAL_I2C_Master_Abort_IT(hi2c: &Hi2c, DevAddress: u16) -> HalStatus;
-    pub fn HAL_I2C_Master_Transmit_DMA(hi2c: &Hi2c, DevAddress: u16, pData: *const u8, Size: u16) -> HalStatus;
-    pub fn HAL_I2C_Master_Receive_DMA(hi2c: &Hi2c, DevAddress: u16, pData: *const u8, Size: u16) -> HalStatus;
+    pub fn HAL_I2C_Master_Abort_IT(hi2c: &Hi2c, DevAddr: u16) -> HalStatus;
+    pub fn HAL_I2C_Master_Transmit_DMA(hi2c: &Hi2c, DevAddr: u16, pData: *const u8, Size: u16) -> HalStatus;
+    pub fn HAL_I2C_Master_Receive_DMA(hi2c: &Hi2c, DevAddr: u16, pData: *const u8, Size: u16) -> HalStatus;
     pub fn HAL_I2C_Slave_Transmit_DMA(hi2c: &Hi2c, pData: *const u8, Size: u16) -> HalStatus;
     pub fn HAL_I2C_Slave_Receive_DMA(hi2c: &Hi2c, pData: *const u8, Size: u16) -> HalStatus;
-    pub fn HAL_I2C_Mem_Write_DMA(
-        hi2c: &Hi2c, DevAddress: u16, MemAddress: u16, MemAddSize: u16, pData: *const u8, Size: u16,
-    ) -> HalStatus;
-    pub fn HAL_I2C_Mem_Read_DMA(
-        hi2c: &Hi2c, DevAddress: u16, MemAddress: u16, MemAddSize: u16, pData: *const u8, Size: u16,
-    ) -> HalStatus;
-    pub fn HAL_I2C_Master_Seq_Transmit_DMA(
-        hi2c: &Hi2c, DevAddress: u16, pData: *const u8, Size: u16, XferOptions: u32,
-    ) -> HalStatus;
-    pub fn HAL_I2C_Master_Seq_Receive_DMA(
-        hi2c: &Hi2c, DevAddress: u16, pData: *const u8, Size: u16, XferOptions: u32,
-    ) -> HalStatus;
+    pub fn HAL_I2C_Mem_Write_DMA(hi2c: &Hi2c, DevAddr: u16, MemAddr: u16, MemAddSize: u16, pData: *const u8, Size: u16) -> HalStatus;
+    pub fn HAL_I2C_Mem_Read_DMA(hi2c: &Hi2c, DevAddr: u16, MemAddr: u16, MemAddSize: u16, pData: *const u8, Size: u16) -> HalStatus;
+    pub fn HAL_I2C_Master_Seq_Transmit_DMA(hi2c: &Hi2c, DevAddr: u16, pData: *const u8, Size: u16, XferOptions: u32) -> HalStatus;
+    pub fn HAL_I2C_Master_Seq_Receive_DMA(hi2c: &Hi2c, DevAddr: u16, pData: *const u8, Size: u16, XferOptions: u32) -> HalStatus;
     pub fn HAL_I2C_Slave_Seq_Transmit_DMA(hi2c: &Hi2c, pData: *const u8, Size: u16, XferOptions: u32) -> HalStatus;
     pub fn HAL_I2C_Slave_Seq_Receive_DMA(hi2c: &Hi2c, pData: *const u8, Size: u16, XferOptions: u32) -> HalStatus;
     pub fn HAL_I2C_EV_IRQHandler(hi2c: &Hi2c);

@@ -9,7 +9,8 @@ mod memory;
 
 pub struct Stm32 {}
 
-impl Mcu for Stm32 {
+impl Mcu for Stm32
+{
     #[cfg(feature = "io")]
     type Io = peripheral::io::Io;
 
@@ -31,14 +32,7 @@ impl Mcu for Stm32 {
     #[cfg(any(feature = "i2c1", feature = "i2c2", feature = "i2c3"))]
     type I2cSlave = peripheral::i2c::I2cSlave;
 
-    #[cfg(any(
-        feature = "spi1",
-        feature = "spi2",
-        feature = "spi3",
-        feature = "spi4",
-        feature = "spi5",
-        feature = "spi6",
-    ))]
+    #[cfg(any(feature = "spi1", feature = "spi2", feature = "spi3", feature = "spi4", feature = "spi5", feature = "spi6",))]
     type Spi = peripheral::spi::Spi;
 
     #[cfg(feature = "flash")]

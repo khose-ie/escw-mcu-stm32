@@ -1,7 +1,8 @@
 use super::HalStatus;
 
 #[repr(C)]
-pub struct Hwwdg {
+pub struct Hwwdg
+{
     pub instance: u32,
 }
 

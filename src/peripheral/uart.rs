@@ -7,7 +7,8 @@ use crate::hal::uart::*;
 use crate::hal::HalStatus;
 
 #[derive(Clone, Copy)]
-pub enum UartIdentifies {
+pub enum UartIdentifies
+{
     #[cfg(feature = "uart1")]
     U1,
     #[cfg(feature = "uart2")]
@@ -26,20 +27,26 @@ pub enum UartIdentifies {
     U8,
 }
 
-impl UartIdentifies {
-    pub const fn count() -> usize {
+impl UartIdentifies
+{
+    pub const fn count() -> usize
+    {
         8
     }
 }
 
-impl Into<usize> for UartIdentifies {
-    fn into(self) -> usize {
+impl Into<usize> for UartIdentifies
+{
+    fn into(self) -> usize
+    {
         self as usize
     }
 }
 
-impl Into<&Huart> for UartIdentifies {
-    fn into(self) -> &'static Huart {
+impl Into<&Huart> for UartIdentifies
+{
+    fn into(self) -> &'static Huart
+    {
         unsafe {
             match self {
                 #[cfg(feature = "uart1")]
@@ -63,10 +70,12 @@ impl Into<&Huart> for UartIdentifies {
     }
 }
 
-impl TryInto<UartIdentifies> for &Huart {
+impl TryInto<UartIdentifies> for &Huart
+{
     type Error = Error;
 
-    fn try_into(self) -> core::result::Result<UartIdentifies, Self::Error> {
+    fn try_into(self) -> core::result::Result<UartIdentifies, Self::Error>
+    {
         match self.instance {
             #[cfg(feature = "uart1")]
             crate::memory::USART1_BASE => Ok(UartIdentifies::U1),
@@ -90,39 +99,38 @@ impl TryInto<UartIdentifies> for &Huart {
     }
 }
 
-pub struct Uart {
+pub struct Uart
+{
     uart: UartIdentifies,
 }
 
-impl Uart {
-    pub fn new(uart: UartIdentifies) -> Self {
+impl Uart
+{
+    pub fn new(uart: UartIdentifies) -> Self
+    {
         Uart { uart }
     }
 }
 
-impl UartDevice for Uart {
+impl UartDevice for Uart
+{
     /// THe TransmitState::Half state will be sent as event only on DMA kind.
-    fn with_event(&mut self, handle: UartEventHandle) {
+    fn with_event(&mut self, handle: UartEventHandle)
+    {
         event::EventCenter::set(self.uart, handle);
     }
 
-    fn send(&self, data: &[u8], timeout: u32) -> Result<()> {
-        unsafe {
-            HAL_UART_Transmit(self.uart.into(), data.as_ptr(), data.len() as u16, timeout).into()
-        }
+    fn send(&self, data: &[u8], timeout: u32) -> Result<()>
+    {
+        unsafe { HAL_UART_Transmit(self.uart.into(), data.as_ptr(), data.len() as u16, timeout).into() }
     }
 
-    fn receive(&self, data: &mut [u8], timeout: u32) -> Result<u32> {
+    fn receive(&self, data: &mut [u8], timeout: u32) -> Result<u32>
+    {
         let mut size: u16 = 0;
 
         unsafe {
-            let state = HAL_UARTEx_ReceiveToIdle(
-                self.uart.into(),
-                data.as_ptr(),
-                data.len() as u16,
-                &mut size,
-                timeout,
-            );
+            let state = HAL_UARTEx_ReceiveToIdle(self.uart.into(), data.as_ptr(), data.len() as u16, &mut size, timeout);
 
             match state {
                 HalStatus::Ok => Ok(size as u32),
@@ -131,40 +139,44 @@ impl UartDevice for Uart {
         }
     }
 
-    fn send_with_interrupt(&self, data: &[u8]) -> Result<()> {
+    fn send_with_interrupt(&self, data: &[u8]) -> Result<()>
+    {
         unsafe { HAL_UART_Transmit_IT(self.uart.into(), data.as_ptr(), data.len() as u16).into() }
     }
 
-    fn receive_with_interrupt(&self, data: &mut [u8]) -> Result<()> {
-        unsafe {
-            HAL_UARTEx_ReceiveToIdle_IT(self.uart.into(), data.as_ptr(), data.len() as u16).into()
-        }
+    fn receive_with_interrupt(&self, data: &mut [u8]) -> Result<()>
+    {
+        unsafe { HAL_UARTEx_ReceiveToIdle_IT(self.uart.into(), data.as_ptr(), data.len() as u16).into() }
     }
 
-    fn send_with_dma(&self, data: &[u8]) -> Result<()> {
+    fn send_with_dma(&self, data: &[u8]) -> Result<()>
+    {
         unsafe { HAL_UART_Transmit_DMA(self.uart.into(), data.as_ptr(), data.len() as u16).into() }
     }
 
-    fn receive_with_dma(&self, data: &mut [u8]) -> Result<()> {
-        unsafe {
-            HAL_UARTEx_ReceiveToIdle_DMA(self.uart.into(), data.as_ptr(), data.len() as u16).into()
-        }
+    fn receive_with_dma(&self, data: &mut [u8]) -> Result<()>
+    {
+        unsafe { HAL_UARTEx_ReceiveToIdle_DMA(self.uart.into(), data.as_ptr(), data.len() as u16).into() }
     }
 
-    fn abort(&self) -> Result<()> {
+    fn abort(&self) -> Result<()>
+    {
         unsafe { HAL_UART_Abort_IT(self.uart.into()).into() }
     }
 
-    fn abort_send(&self) -> Result<()> {
+    fn abort_send(&self) -> Result<()>
+    {
         unsafe { HAL_UART_AbortTransmit_IT(self.uart.into()).into() }
     }
 
-    fn abort_receive(&self) -> Result<()> {
+    fn abort_receive(&self) -> Result<()>
+    {
         unsafe { HAL_UART_AbortReceive_IT(self.uart.into()).into() }
     }
 }
 
-mod event {
+mod event
+{
     use escw_mcu::peripheral::uart::UartEvent;
     use escw_mcu::peripheral::uart::UartEventHandle;
 
@@ -174,24 +186,29 @@ mod event {
 
     static mut EVENT_CENTER: EventCenter = EventCenter::new();
 
-    pub struct EventCenter {
+    pub struct EventCenter
+    {
         handle: [Option<UartEventHandle>; UartIdentifies::count()],
     }
 
-    impl EventCenter {
-        const fn new() -> Self {
+    impl EventCenter
+    {
+        const fn new() -> Self
+        {
             EventCenter {
                 handle: [None; UartIdentifies::count()],
             }
         }
 
-        pub fn set(uart: UartIdentifies, invoke: UartEventHandle) {
+        pub fn set(uart: UartIdentifies, invoke: UartEventHandle)
+        {
             unsafe {
                 EVENT_CENTER.handle[uart as usize] = Some(invoke);
             }
         }
 
-        pub fn invoke(uart: UartIdentifies, event: UartEvent) {
+        pub fn invoke(uart: UartIdentifies, event: UartEvent)
+        {
             unsafe {
                 if let Some(invoke) = EVENT_CENTER.handle[uart as usize].as_ref() {
                     invoke(event);
@@ -201,14 +218,16 @@ mod event {
     }
 
     #[no_mangle]
-    pub extern "C" fn HAL_UART_TxCpltCallback(huart: &Huart) {
+    pub extern "C" fn HAL_UART_TxCpltCallback(huart: &Huart)
+    {
         if let Some(uart) = huart.try_into().ok() {
             EventCenter::invoke(uart, UartEvent::TxCompleted);
         }
     }
 
     #[no_mangle]
-    pub extern "C" fn HAL_UART_TxHalfCpltCallback(huart: &Huart) {
+    pub extern "C" fn HAL_UART_TxHalfCpltCallback(huart: &Huart)
+    {
         if let Some(uart) = huart.try_into().ok() {
             EventCenter::invoke(uart, UartEvent::TxHalf);
         }
@@ -229,35 +248,40 @@ mod event {
     // }
 
     #[no_mangle]
-    pub extern "C" fn HAL_UART_ErrorCallback(huart: &Huart) {
+    pub extern "C" fn HAL_UART_ErrorCallback(huart: &Huart)
+    {
         if let Some(uart) = huart.try_into().ok() {
             EventCenter::invoke(uart, UartEvent::Error);
         }
     }
 
     #[no_mangle]
-    pub extern "C" fn HAL_UART_AbortCpltCallback(huart: &Huart) {
+    pub extern "C" fn HAL_UART_AbortCpltCallback(huart: &Huart)
+    {
         if let Some(uart) = huart.try_into().ok() {
             EventCenter::invoke(uart, UartEvent::TxRxAborted);
         }
     }
 
     #[no_mangle]
-    pub extern "C" fn HAL_UART_AbortTransmitCpltCallback(huart: &Huart) {
+    pub extern "C" fn HAL_UART_AbortTransmitCpltCallback(huart: &Huart)
+    {
         if let Some(uart) = huart.try_into().ok() {
             EventCenter::invoke(uart, UartEvent::TxAborted);
         }
     }
 
     #[no_mangle]
-    pub extern "C" fn HAL_UART_AbortReceiveCpltCallback(huart: &Huart) {
+    pub extern "C" fn HAL_UART_AbortReceiveCpltCallback(huart: &Huart)
+    {
         if let Some(uart) = huart.try_into().ok() {
             EventCenter::invoke(uart, UartEvent::RxAborted);
         }
     }
 
     #[no_mangle]
-    pub extern "C" fn HAL_UARTEx_RxEventCallback(huart: &Huart, size: u16) {
+    pub extern "C" fn HAL_UARTEx_RxEventCallback(huart: &Huart, size: u16)
+    {
         let mut state = UartEvent::RxCompleted(size);
 
         unsafe {

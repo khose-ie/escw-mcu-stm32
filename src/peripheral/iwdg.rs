@@ -5,14 +5,18 @@ use crate::hal::iwdg::*;
 
 pub struct Iwdg {}
 
-impl Iwdg {
-    pub fn new() -> Self {
+impl Iwdg
+{
+    pub fn new() -> Self
+    {
         Iwdg {}
     }
 }
 
-impl WdtDevice for Iwdg {
-    fn refresh(&self) -> Result<()> {
+impl WdtDevice for Iwdg
+{
+    fn refresh(&self) -> Result<()>
+    {
         unsafe { HAL_IWDG_Refresh(&hiwdg).into() }
     }
 }

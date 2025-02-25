@@ -14,7 +14,8 @@ pub const FLASH_TYPEPROGRAM_WORD: u32 = 0x0000_0002;
 pub const FLASH_TYPEPROGRAM_DOUBLEWORD: u32 = 0x0000_0003;
 
 #[repr(C)]
-pub struct FlashEraseInitTypeDef {
+pub struct FlashEraseInitTypeDef
+{
     pub type_erase: u32,
     pub banks: u32,
     pub sector: u32,
@@ -22,8 +23,10 @@ pub struct FlashEraseInitTypeDef {
     pub voltage_range: u32,
 }
 
-impl FlashEraseInitTypeDef {
-    pub fn new(banks: u32, sector: u32, count: u32) -> Self {
+impl FlashEraseInitTypeDef
+{
+    pub fn new(banks: u32, sector: u32, count: u32) -> Self
+    {
         FlashEraseInitTypeDef {
             type_erase: FLASH_ERASE_KIND_SECTORS,
             banks,

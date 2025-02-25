@@ -2,7 +2,8 @@ use super::HalStatus;
 
 #[repr(C)]
 #[derive(PartialEq, Eq)]
-pub enum State {
+pub enum State
+{
     Reset = 0x00,
     Ready = 0x20,
     Busy = 0x24,
@@ -14,7 +15,8 @@ pub enum State {
 }
 
 #[repr(C)]
-pub struct Huart {
+pub struct Huart
+{
     pub instance: u32,
 }
 
@@ -38,8 +40,7 @@ extern "C" {
 }
 
 extern "C" {
-    pub fn HAL_UART_Transmit(huart: &Huart, pData: *const u8, Size: u16, Timeout: u32)
-        -> HalStatus;
+    pub fn HAL_UART_Transmit(huart: &Huart, pData: *const u8, Size: u16, Timeout: u32) -> HalStatus;
     pub fn HAL_UART_Receive(huart: &Huart, pData: *const u8, Size: u16, Timeout: u32) -> HalStatus;
     pub fn HAL_UART_Transmit_IT(huart: &Huart, pData: *const u8, Size: u16) -> HalStatus;
     pub fn HAL_UART_Receive_IT(huart: &Huart, pData: *const u8, Size: u16) -> HalStatus;
@@ -51,13 +52,7 @@ extern "C" {
     pub fn HAL_UART_Abort_IT(huart: &Huart) -> HalStatus;
     pub fn HAL_UART_AbortTransmit_IT(huart: &Huart) -> HalStatus;
     pub fn HAL_UART_AbortReceive_IT(huart: &Huart) -> HalStatus;
-    pub fn HAL_UARTEx_ReceiveToIdle(
-        huart: &Huart,
-        pData: *const u8,
-        Size: u16,
-        RxLen: &u16,
-        Timeout: u32,
-    ) -> HalStatus;
+    pub fn HAL_UARTEx_ReceiveToIdle(huart: &Huart, pData: *const u8, Size: u16, RxLen: &u16, Timeout: u32) -> HalStatus;
     pub fn HAL_UARTEx_ReceiveToIdle_IT(huart: &Huart, pData: *const u8, Size: u16) -> HalStatus;
     pub fn HAL_UARTEx_ReceiveToIdle_DMA(huart: &Huart, pData: *const u8, Size: u16) -> HalStatus;
     pub fn HAL_UART_GetState(huart: &Huart) -> State;
