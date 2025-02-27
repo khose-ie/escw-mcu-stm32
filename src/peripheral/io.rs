@@ -7,7 +7,7 @@ pub use io_port::IoPort;
 use crate::hal::io::{HAL_GPIO_ReadPin, HAL_GPIO_TogglePin, HAL_GPIO_WritePin};
 use escw_mcu::peripheral::io::{IoDevice, IoState};
 
-static mut EVENT_HANDLE: Option<fn(pin: IoPin)> = None;
+static mut EVENT_HANDLE: Option<fn(IoPin)> = None;
 
 pub struct Io
 {
@@ -27,10 +27,10 @@ impl IoDevice for Io
 {
     type Pin = IoPin;
 
-    fn with_event(&self, handle: fn(pin: Self::Pin))
+    fn with_event(&self, event_handle: fn(pin: Self::Pin))
     {
         unsafe {
-            EVENT_HANDLE = Some(handle);
+            EVENT_HANDLE = Some(event_handle);
         }
     }
 
@@ -55,12 +55,10 @@ impl IoDevice for Io
 }
 
 #[no_mangle]
-pub extern "C" fn HAL_GPIO_EXTI_Callback(pin: u16)
+pub unsafe extern "C" fn HAL_GPIO_EXTI_Callback(pin: u16)
 {
-    unsafe {
-        if let Some(event_handle) = EVENT_HANDLE
-        {
-            event_handle(IoPin::from(pin));
-        }
+    if let Some(event_handle) = EVENT_HANDLE
+    {
+        event_handle(IoPin::from(pin));
     }
 }
