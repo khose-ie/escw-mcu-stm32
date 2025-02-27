@@ -11,6 +11,8 @@ homepage = "https://github.com/khose-ie/escw-mcu-stm32"
 
 [lib]
 name = "escw_mcu_stm32"
+test = false
+bench = false
 
 [dependencies]
 # escw-mcu = "0.1.0"
@@ -18,8 +20,7 @@ escw-mcu = { path = "../escw-mcu" }
 # spin = "0.9.8"
 
 [features]
-stm32f4 = []
-io = ["escw-mcu/io"]
+stm32f407xx = []
 uart1 = ["escw-mcu/uart"]
 uart2 = ["escw-mcu/uart"]
 uart3 = ["escw-mcu/uart"]
